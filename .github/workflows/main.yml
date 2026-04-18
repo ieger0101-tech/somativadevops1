@@ -24,4 +24,4 @@ jobs:
 
     steps:
       - name: Simulando deploy
-        run: echo "Deploy da imagem Docker realizado com sucesso 🚀"
+        run: echo "Deploy da imagem Docker realizado com sucesso "
