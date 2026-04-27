@@ -1,29 +1,24 @@
 name: CI/CD Pipeline
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
-    branches: [ main ] # Adicionado para rodar quando você fizer merge
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
 
       - name: Construir Imagem Docker
         run: docker build -t minha-app-docker:latest .
-        # O ponto (.) no final indica que o Dockerfile está na raiz
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-
     steps:
       - name: Simulando deploy
-        run: echo "Deploy da imagem Docker realizado com sucesso "
-
-        # comentário para CI
+        run: echo "Deploy da imagem Docker realizado com sucesso 🚀"
