@@ -1,29 +1,30 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline com Alerta
 
 on:
+  push:
+    branches: ["*"]
   pull_request:
-    branches: [ main ]
+    branches: ["*"]
 
 jobs:
-  build:
+  test_and_build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
+      - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Rodar Testes
+        run: echo "Executando testes..."
+
+      - name: Construir Imagem Docker
+        run: docker build -t minha-app .
+
+      # CONFIGURAÇÃO DO ALERTA DISCORD (Semana 6)
+      - name: Enviar Alerta ao Discord
+        uses: sarisia/actions-status-discord@v1
+        if: always() # Rodar sempre, mesmo se der erro acima
         with:
-          python-version: 3.11
-
-      - name: Run app
-        run: python main.py
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Simulando deploy
-        run: echo "Deploy realizado com sucesso 🚀"
+          webhook: ${{ secrets.DISCORD_WEBHOOK }} # Nome da Secret que você criou
+          status: ${{ job.status }}
+          content: "Opa! O pipeline do @${{ github.actor }} terminou."
+          title: "Status do Workflow"
